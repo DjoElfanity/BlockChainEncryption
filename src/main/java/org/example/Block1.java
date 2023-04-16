@@ -1,18 +1,23 @@
 package org.example;
 
-import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
-public class Block {
-    private String data , previousHash , hash;
+public class Block1 {
+    private long index;
+    private String previousHash , hash;
+    private List<Transaction> transactions = new ArrayList<>();
     private long time;
 
 
-    public Block(String data, String previousHash) {
-        this.data = data;
+    public Block1(long index,List<Transaction> transactions, String previousHash) {
+        this.index = index;
+        this.transactions = transactions;
         this.previousHash = previousHash;
         this.time = new Date().getTime();
         this.hash = calculateHash();
@@ -20,17 +25,26 @@ public class Block {
 
     public String calculateHash()
     {
-     String blockData = data + time + previousHash;
+     String blockData = Arrays.toString(transactions.toArray()) + time + previousHash;
      String hashCode = Hashing.sha256().hashString(blockData,  StandardCharsets.UTF_8).toString();
      return hashCode ;
     }
 
-    public String getData() {
-        return data;
+
+    public long getIndex() {
+        return index;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setIndex(long index) {
+        this.index = index;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public String getPreviousHash() {
@@ -60,7 +74,7 @@ public class Block {
     @Override
     public String toString() {
         return "Block{" +
-                "data='" + data + '\'' +
+                "data='" + Arrays.toString(transactions.toArray())  + '\'' +
                 ", previousHash='" + previousHash + '\'' +
                 ", hash='" + hash + '\'' +
                 ", time=" + time +
